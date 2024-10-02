@@ -1,13 +1,14 @@
-export default [
+module.export = [
 	{ ignores: ['dist'] },
 	{
-		files: ['src/**/*.{js}'],
+		files: ['**/*.{js}'],
 		languageOptions: {
 			ecmaVersion: 5,
+			sourceType: 'script',
 			parserOptions: {
 				ecmaVersion: 5,
-				ecmaFeatures: { jsx: true },
-				sourceType: 'commonjs',
+				ecmaFeatures: { jsx: false },
+				sourceType: 'script',
 			},
 		},
 	},
