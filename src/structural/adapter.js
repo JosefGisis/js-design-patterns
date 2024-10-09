@@ -8,5 +8,49 @@
  * assumptions about the interfaces clients expect.
  */
 
-// Class Adapter
-// Adaptee
+function ContactV1(firstName, lastName) {
+    this.firstName = firstName
+    this.lastName = lastName
+}
+
+function ContactV2(name) {
+    this.name = name
+}
+
+// Adapter
+function ContactAdapter(contact) {
+    this.adaptToV1 = function (contact) {
+        if (contact instanceof ContactV1) {
+            return contact
+        } else {
+            const nameParts = contact.name.split(' ')
+            return { firstName: nameParts[0], lastName: nameParts[1] }
+        }
+    }
+    this.adaptToV2 = function (contact) {
+        if (contact instanceof ContactV2) {
+            return contact
+        } else {
+            return { name: contact.firstName + ' ' + contact.lastName }
+        }
+    }
+}
+
+// Usage
+const contactAdapter = new ContactAdapter()
+const johnDoe = new ContactV1('John', 'Doe')
+const janeSmith = new ContactV2('Jane Smith')
+
+function logContactName(contact) {
+    console.log(contact.name)
+}
+
+function logFirstName(contact) {
+    console.log(contact.firstName)
+}
+
+logContactName(contactAdapter.adaptToV2(johnDoe))
+logContactName(contactAdapter.adaptToV2(janeSmith))
+console.log('\n')
+logFirstName(contactAdapter.adaptToV1(johnDoe))
+logFirstName(contactAdapter.adaptToV1(janeSmith))
