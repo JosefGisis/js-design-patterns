@@ -6,10 +6,44 @@
  *
  * Flyweight usually uses composite for recursive composition, and a factory method to
  * manage the creation of flyweight objects.
- *
- * This example is based on the text editor example from the book "Design Patterns".
- * It is a good exmaple of how flyweight can be used to create a large number of objects
- * without using a lot of memory. Each letter and layout object is a flyweight object.
- * The layout objects (row and column) may not need to take up a lot of memory, but the
- * characters can quickly add up and become a large memory drain.
  */
+
+const FlyweightFactory = (function () {
+    const charMap = new Map()
+
+    function Character(char) {
+        this.character = char.toLowerCase()
+        this.draw = function () {
+            console.log(this.character)
+        }
+    }
+
+    function Space() {
+        this.draw = function () {
+            console.log(' ')
+        }
+    }
+
+    return {
+        getCharacter: function (char) {
+            if (!charMap.has(char)) {
+                if (char === ' ') {
+                    charMap.set(char, new Space())
+                } else {
+                    charMap.set(char, new Character(char))
+                }
+            }
+            return charMap.get(char)
+        },
+    }
+})()
+
+// Usage
+const helloWorld = ['h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd']
+helloWorld.forEach((char) => {
+    FlyweightFactory.getCharacter(char).draw()
+})
+
+const h1 = FlyweightFactory.getCharacter('h')
+const h2 = FlyweightFactory.getCharacter('h')
+console.log('Are h1 and h2 the same object?', h1 === h2)
