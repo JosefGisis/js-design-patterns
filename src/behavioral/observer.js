@@ -9,3 +9,75 @@
  * the data. React dependencies also suffer from similar pitfalls to the observer pattern; that is, errors can be hard to
  * debug, and changes can cause cascading and unpredictable effects.
  */
+
+const movieReviewData = (function () {
+    let movieReviews = []
+    const observers = new Map()
+
+    const getMovies = function () {
+        return movieReviews
+    }
+
+    const addObserver = function (observer) {
+        if (observers.has(observer.id)) {
+            console.log('looks like this observer has already been added')
+            return
+        }
+        observers.set(observer.id, observer)
+    }
+
+    const notifyObservers = function () {
+        observers.forEach((observer) => {
+            observer.update()
+        })
+    }
+
+    const setMovieReviews = function (movies) {
+        movieReviews = movies
+        notifyObservers()
+    }
+
+    return {
+        getMovies,
+        addObserver,
+        setMovieReviews,
+    }
+})()
+
+// You would really create multiple observers and add them to the movieReviewData object
+// We will just create one for demonstration purposes
+function MovieReviewObserver(id, dependency) {
+    this.id = id
+    this.dependency = dependency
+    this.movieReviews = []
+
+    this.update = function () {
+        this.movieReviews = this.dependency?.getMovies() || []
+        console.log(' ')
+        console.log('Movie Names:')
+        this.movieReviews.map((review) => console.log(review.name))
+    }
+}
+
+// Usage
+const movieReviews = [
+    { id: 1, name: 'Django Unchained', rating: 9 },
+    { id: 2, name: 'Pulp Fiction', rating: 9 },
+    { id: 3, name: 'Kill Bill', rating: 8 },
+    { id: 4, name: 'Kill Bill 2', rating: 8 },
+    { id: 5, name: 'Jackie Brown', rating: 8 },
+    { id: 6, name: 'Inglorious Basterds', rating: 9 },
+    { id: 7, name: 'Reservoir Dogs', rating: 7 },
+    { id: 8, name: 'The Hateful Eight', rating: 8 },
+    { id: 9, name: 'Once Upon a Time in Hollywood', rating: 8 },
+    { id: 11, name: 'Death Proof', rating: 4 },
+]
+
+const movieReviewNameObserver = new MovieReviewObserver(1, movieReviewData)
+movieReviewData.addObserver(movieReviewNameObserver)
+
+movieReviewData.setMovieReviews(movieReviews)
+movieReviewData.setMovieReviews([
+    ...movieReviews,
+    { id: 10, name: 'From Dusk Till Dawn', rating: 3 },
+])
