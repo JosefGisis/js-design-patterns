@@ -12,5 +12,81 @@
  * class and forwards all requests to the component. See code.
  *
  * AKA: Wrapper
+ *
+ * The following method uses wrapper functions to decorate the objects. You could also use prototypical
+ * inheritance to do something similar.
  */
 
+function TextManager(text) {
+    let _text = text
+
+    return {
+        logText: function () {
+            console.log(_text)
+        },
+
+        setText: function (text) {
+            if (!text || !text.length) {
+                _text = 'hello world'
+                return
+            }
+            _text = text
+        },
+
+        getText: function () {
+            return _text
+        },
+    }
+}
+
+// This function creates a decorator that will add a surround the text with a dunder
+// This function creates a wrapper and is literally a wrapper function.
+function DunderDecorator(textManager) {
+    const text = `__${textManager.getText()}__`
+    return Object.create(new TextManager(text), {
+        removeDunders: {
+            value: function () {
+                return Object.create(new TextManager(text.replace(/__/g, '')))
+            },
+            configurable: true,
+            writable: true,
+            enumerable: true,
+        },
+    })
+}
+
+function AsteriskDecorator(textManager) {
+    const text = `*${textManager.getText()}*`
+    return Object.create(new TextManager(text), {
+        removeAsterisks: {
+            value: function () {
+                return Object.create(new TextManager(text.replace(/\*/g, '')))
+            },
+            configurable: true,
+            writable: true,
+            enumerable: true,
+        },
+    })
+}
+
+// We can recursively nest these objects
+const helloWorld = new TextManager('hello world')
+const dunderedHelloWorld = new DunderDecorator(helloWorld)
+const asteriskedDunderedHelloWorld = new AsteriskDecorator(dunderedHelloWorld)
+const dunderedAsteriskedDunderedHelloWorld = new DunderDecorator(
+    asteriskedDunderedHelloWorld
+)
+
+dunderedAsteriskedDunderedHelloWorld.logText() // __*__hello world__*__
+
+// We can remove dunders as this a dundered text
+const dunderlessAsteriskedHelloWorld =
+    dunderedAsteriskedDunderedHelloWorld.removeDunders()
+dunderlessAsteriskedHelloWorld.logText() // *hello world*
+
+// Have to make it a double asterisk to get the removeAsterisks method
+const doubleAsteriskedHelloWorld = new AsteriskDecorator(
+    dunderlessAsteriskedHelloWorld
+)
+const asterisklessHelloWorld = doubleAsteriskedHelloWorld.removeAsterisks()
+asterisklessHelloWorld.logText() // hello world
