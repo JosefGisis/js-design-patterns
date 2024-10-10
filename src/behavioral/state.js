@@ -5,5 +5,41 @@
  * to an external object.
  */
 
-// Welcome message will be a large mutli-part message for a website. The message will be different if
-// the user is logged in, or a new user, or if there is a special promotion, etc.
+// These are state singletons. Because they are object literals, we do not have to instantiate out states
+const guestState = {
+    showBanner: function (name) {
+        console.log('welcome to out website, create an account to get started')
+    },
+}
+
+const memberState = {
+    showBanner: function (name) {
+        console.log('welcome back to our website ' + name)
+    },
+}
+
+// The website object is the context. It has a state property that is initially set to null
+// The state property is then set to either the guestState or memberState object.
+const website = {
+    state: null,
+    userName: '',
+
+    showBanner: function () {
+        this.state.showBanner(this.userName)
+    },
+
+    openWebsite: function () {
+        this.state = guestState
+    },
+
+    login: function (userName) {
+        this.userName = userName
+        this.state = memberState
+    },
+}
+
+// Usage
+website.openWebsite()
+website.showBanner()
+website.login('John Doe')
+website.showBanner()
