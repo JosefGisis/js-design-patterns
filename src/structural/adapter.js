@@ -18,26 +18,23 @@ function ContactV2(name) {
 }
 
 // Adapter
-function ContactAdapter(contact) {
-    this.adaptToV1 = function (contact) {
-        if (contact instanceof ContactV1) {
-            return contact
-        } else {
+const contactAdapter = (function ContactAdapter() {
+    return {
+        adaptToV1: function (contact) {
+            if (contact instanceof ContactV1) return contact
+
             const nameParts = contact.name.split(' ')
             return { firstName: nameParts[0], lastName: nameParts[1] }
-        }
-    }
-    this.adaptToV2 = function (contact) {
-        if (contact instanceof ContactV2) {
-            return contact
-        } else {
+        },
+        adaptToV2: function (contact) {
+            if (contact instanceof ContactV2) return contact
+
             return { name: contact.firstName + ' ' + contact.lastName }
-        }
+        },
     }
-}
+})()
 
 // Usage
-const contactAdapter = new ContactAdapter()
 const johnDoe = new ContactV1('John', 'Doe')
 const janeSmith = new ContactV2('Jane Smith')
 
@@ -54,3 +51,63 @@ logContactName(contactAdapter.adaptToV2(janeSmith))
 console.log('\n')
 logFirstName(contactAdapter.adaptToV1(johnDoe))
 logFirstName(contactAdapter.adaptToV1(janeSmith))
+
+/**
+ * This method matches the object based adapter pattern; however, we could also do some
+ * prototype adapting by returning an object with a new adapter.
+ */
+function ContactV3(name) {
+    this.name = name
+}
+ContactV3.prototype.logName = function () {
+    console.log(this.name)
+}
+
+function ContactV4(name) {
+    this.name = name
+}
+ContactV4.prototype.nameLogger = function () {
+    console.log(this.name)
+}
+
+const contactPrototypeAdapter = (function () {
+    return {
+        toV3Prototype: function (contact) {
+            if (contact instanceof ContactV3) return contact
+            return Object.create(new ContactV3(), {
+                name: {
+                    value: contact.name,
+                    writable: true,
+                    enumerable: true,
+                    configurable: true,
+                },
+            })
+        },
+        toV4Prototype: function (contact) {
+            if (contact instanceof ContactV4) return contact
+            return Object.create(new ContactV4(), {
+                name: {
+                    value: contact.name,
+                    writable: true,
+                    enumerable: true,
+                    configurable: true,
+                },
+            })
+        },
+    }
+})()
+
+const johnDoeV3 = new ContactV3('John Doe')
+const janeSmithV4 = new ContactV4('Jane Smith')
+
+console.log('\n')
+
+// If we were to call the nameLogger method on johnDoeV3, it would throw an error because the name property is undefined
+// so lets adapt it
+const adaptedJohnDoe = contactPrototypeAdapter.toV4Prototype(johnDoeV3)
+adaptedJohnDoe.nameLogger()
+
+// If we were to call the logName method on janeSmithV4, it would throw an error because the name property is undefined
+// so lets adapt it
+const adaptedJaneSmith = contactPrototypeAdapter.toV3Prototype(janeSmithV4)
+adaptedJaneSmith.logName()
