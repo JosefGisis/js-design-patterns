@@ -1,6 +1,8 @@
 /**
- * The Decorator design pattern allows behavior to be added to individual objects dynamically and
- * is a good way to avoid subclassing to achieve extensibility. It does this by wrapping an object
+ * AKA: Wrapper
+ *
+ * The Decorator design pattern allows behavior to be added to individual objects dynamically to avoid
+ * subclassing to achieve extensibility. It does this by wrapping an object
  * in an invisible object (that is, its interface conforms to the one the client expects).
  * Because the "wrapper" is invisible, you can recursively wrap objects in wrappers, which allows
  * for an unlimited number of added responsibilities.
@@ -11,10 +13,8 @@
  * One way of doing this is by making the decorator class an abstract class that extends the component
  * class and forwards all requests to the component. See code.
  *
- * AKA: Wrapper
- *
- * The following method uses wrapper functions to decorate the objects. You could also use prototypical
- * inheritance to do something similar.
+ * This example will use prototypical inheritance that uses wrapper functions to decorate the objects.
+ * We create a clone of the text manager that decorate the text and provide additional functionality.
  */
 
 function TextManager(text) {
@@ -39,7 +39,7 @@ function TextManager(text) {
     }
 }
 
-// This function creates a decorator that will add a surround the text with a dunder
+// This function creates a decorator that will surround the text with a dunder.
 // This function creates a wrapper and is literally a wrapper function.
 function DunderDecorator(textManager) {
     const text = `__${textManager.getText()}__`
