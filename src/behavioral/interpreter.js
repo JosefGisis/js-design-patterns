@@ -8,11 +8,6 @@
  * example, there would be a parser that would parse the expression and create the object structure that represents
  * the expression. For the sake of this example, we will manually create the object structure.
  *
- * repetitive functions are meant to mimic an object tree. They can be refactored to use a
- * factory pattern to create the objects, but that would result in large conditional statements
- * and would make the code harder to read to extend. Additionally, the function are meant to
- * simulate the nodes of the interpreter's logic tree.
- *
  * Because we do not have interface in JavaScript, and a prototype would not be useful, as none
  * of the objects share implementations, we will use duck typing to ensure that the objects
  * have the same methods.
