@@ -4,56 +4,47 @@
  *
  * This structure also supports recursive composition, which allows an object to be a part of multiple
  * objects at the same time.
+ *
+ * In a class-based example we would a component superclass that would define the interface for both
+ * leaf and composite objects. Leaf objects would be the primitive objects that do not have children,
+ * while composite objects would be the objects that can contain children. However, in JavaScript we
+ * can use prototypical inheritance to create a similar structure, but given the fact that not much of
+ * the implementation for composite and leaf objects would be shared, a prototype just adds complexity
+ * without much benefit. Instead we utilize duck typing to conduct behavior.
  */
 
-// This example will use strings as the leaf objects and arrays as the composite objects.
-// Component prototype
-function Component() {}
-Component.prototype = {
-    constructor: Component,
-    isComposite: function () {
-        return this.children ? true : false
-    },
-    isLeaf: function () {
-        return this.text ? true : false
-    },
+// Leaf object
+// Sentence really would benefit from a prototype as may have many instances
+// that should share the same methods.
+function Sentence(text) {
+    this.text = text
+}
+Sentence.prototype = {
+    constructor: Sentence,
     logText: function () {
         console.log(this.text)
     },
+    add: function () {
+        console.log('Cannot add to a leaf')
+    },
     remove: function () {
-        console.log('Component does not necessarily contain any children')
+        console.log('Leaves do not have children')
     },
     getChild: function () {
-        console.log('Component does not necessarily contain any children')
+        console.log('Leaves do not have children')
     },
     getChildren: function () {
-        console.log('Component does not necessarily contain any children')
+        return []
     },
 }
-
-// Leaf object
-function Sentence(text) {
-    this.text = text
-    this.add = function () {
-        console.log('Cannot add to a leaf')
-    }
-    this.remove = function () {
-        console.log('Leaves do not have children')
-    }
-    this.getChild = function () {
-        console.log('Leaves do not have children')
-    }
-    this.getChildren = function () {
-        return []
-    }
-}
-Sentence.prototype = new Component()
 
 // Composite object
 function Paragraph() {
     this.children = []
-
-    this.logText = function () {
+}
+Paragraph.prototype = {
+    constructor: Paragraph,
+    logText: function () {
         this.children.forEach((child) => {
             if (child instanceof Sentence) child.logText()
             else {
@@ -62,23 +53,21 @@ function Paragraph() {
                 console.log(' ')
             }
         })
-    }
-
-    this.add = function (child) {
+    },
+    add: function (child) {
         this.children.push(child)
-    }
-    this.remove = function (i) {
+    },
+    remove: function (i) {
         this.children.splice(i, 1)
-    }
-    this.getChild = function (i) {
+    },
+    getChild: function (i) {
         if (i < 0 || i >= this.children.length) return null
         return this.children[i]
-    }
-    this.getChildren = function () {
+    },
+    getChildren: function () {
         return this.children
-    }
+    },
 }
-Paragraph.prototype = new Component()
 
 // Usage (client)
 const paragraph = new Paragraph()
