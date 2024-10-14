@@ -1,9 +1,14 @@
 /**
- * The builder design pattern seperates the construction of a complex object from its representation.
+ * The builder design pattern separates the construction of a complex object from its representation.
  * This allows greater flexibility and control over the construction process and allows quick changes to the
  * object being built.
+ *
+ * The following example demonstrates prototypical inheritance as a way to implement the builder design pattern.
+ * The prototype contains default values and methods for building a bread object. Constructors or objects that inherit from
+ * the prototype can override the default values and methods to create a different type of bread.
  */
 
+// BreadBuilder prototype
 function BreadBuilder() {}
 BreadBuilder.prototype = {
     ingredients: 'eggs, flour, and water',
@@ -18,6 +23,8 @@ BreadBuilder.prototype = {
     },
 }
 
+// Prototyping white bread builder
+// Whole wheat bread builder
 const wholeWheatBreadBuilder = Object.create(BreadBuilder.prototype, {
     ingredients: {
         value: 'whole wheat flour, eggs, and water',
@@ -32,10 +39,12 @@ const wholeWheatBreadBuilder = Object.create(BreadBuilder.prototype, {
     },
 })
 
+// Usage (client)
 const whiteBreadBuilder = new BreadBuilder()
 
 let breadBuilder = whiteBreadBuilder
 
+// You could make this an object with a method that calls the functions, but this still seperates the construction of the object from its representation
 function bakeBread() {
     breadBuilder.addIngredients()
     breadBuilder.letRise()
