@@ -1,8 +1,8 @@
 ## Design Patterns
 
-This repository contains practice examples for all 23 design patterns from "Design Patterns: Elements of Reusable Object-Oriented Software" by Gamma, Helm, Johnson, and Vlissides in JavaScript using ES5 features.
+This repository contains practice examples for all 23 design patterns from "Design Patterns: Elements of Reusable Object-Oriented Software" by Gamma, Helm, Johnson, and Vlissides in JavaScript.
 
-Because ES5 does not have class features, the examples will focus on solving the problems the design pattern addresses rather than strictly conforming to intent.
+In order to demonstrate JavaScript's native functionality, none of the examples utilize ES6 classes. Because of the incompatibility between class based design patters, many of the examples will focus on the "intent" of the design pattern (if a design patterns "intent" is based on class-based inheritance, the example will focus on the "motivation" for the design pattern.)
 
 ### What are design patterns?
 
