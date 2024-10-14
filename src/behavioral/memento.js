@@ -58,11 +58,7 @@ function UserMemento(originator) {
         }
         this.state = state
     }
-
-    this.getState2 = function () {
-        return this.state
-    }
-
+    
     this.getState = function (originator) {
         if (originator !== this.originator) {
             console.log('Cannot get state for another originator')
