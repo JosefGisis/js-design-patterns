@@ -12,38 +12,33 @@
  */
 
 // example payment processor. These are the implementations that we want to abstract from the payment object.
-const mastercardProcessor = (function () {
-    return {
-        processPayment: function (amount) {
-            console.log(`Processing ${amount} via Mastercard`)
-        },
-        refundPayment: function (amount) {
-            console.log(`Refunding ${amount} via Mastercard`)
-        },
-    }
-})()
+// These are some singletons that contains the logic for processing payments.
+const mastercardProcessor = {
+    processPayment: function (amount) {
+        console.log(`Processing ${amount} via Mastercard`)
+    },
+    refundPayment: function (amount) {
+        console.log(`Refunding ${amount} via Mastercard`)
+    },
+}
 
-const visaProcessor = (function () {
-    return {
-        processPayment: function (amount) {
-            console.log(`Processing ${amount} via Visa`)
-        },
-        refundPayment: function (amount) {
-            console.log(`Refunding ${amount} via Visa`)
-        },
-    }
-})()
+const visaProcessor = {
+    processPayment: function (amount) {
+        console.log(`Processing ${amount} via Visa`)
+    },
+    refundPayment: function (amount) {
+        console.log(`Refunding ${amount} via Visa`)
+    },
+}
 
-const paypalProcessor = (function () {
-    return {
-        processPayment: function (amount) {
-            console.log(`Processing ${amount} via Paypal`)
-        },
-        refundPayment: function (amount) {
-            console.log(`Refunding ${amount} via Paypal`)
-        },
-    }
-})()
+const paypalProcessor = {
+    processPayment: function (amount) {
+        console.log(`Processing ${amount} via Paypal`)
+    },
+    refundPayment: function (amount) {
+        console.log(`Refunding ${amount} via Paypal`)
+    },
+}
 
 // payment abstraction (also a prototype)
 function Payment(processor, amount) {
