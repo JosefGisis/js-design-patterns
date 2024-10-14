@@ -5,6 +5,10 @@
  * the subsystem.
  *
  * Clients can still use the subsystem directly if they need to.
+ * 
+ * The following example does not provide an interface to a set of interfaces in a subsystem, but rather
+ * provides a facade for the subsystems at work in a bakery. In this example clients need not be aware of
+ * inventory management, or the details of baking a cake and selling a cake.
  */
 
 // Baker manager is a facade for the subsystems at work in a bakery.
