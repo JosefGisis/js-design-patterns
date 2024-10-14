@@ -4,48 +4,78 @@
  * specifics of the object conformities and dependencies.
  *
  * The intent of the abstract factory is to "provide an interface for creating families of related
- * or dependent objects without specifying their concrete classes."
- *
- * The heart of the problem  abstract factory is trying to solve is that sometimes we want to coordinate
- * the creation of of certain related objects; however, if it is a large number of objects, then just creating
- * those objects on the client side can lead to a lot of complexity.
- *
- * We cannot create interfaces for classes in JavaScript, but we can create a factory that will
- * provide prototypical methods for instantiating objects.
+ * or dependent objects without specifying their concrete classes." While we cannot create an interface with
+ * JavaScript, we can try to solve the core problem the design pattern is trying to solve. The purpose of the
+ * abstract factory is that allows us to regulate the instantiation of a group of classes that have a common
+ * theme or are dependent on each other.
  */
 
-function GreeterFactory() {}
-GreeterFactory.prototype = {
-    constructor: GreeterFactory,
-    createGreeting: function () {
-        return new Greeting('hello')
+// Because we do not have interfaces in JavaScript, we can use a duck typing (if it acts like a concrete factory, it is a concrete factory)
+// Rather than constructing objects directly, the client calls the creation methods of the factory to create the objects.
+const redClothingFactory = {
+    createClothingSet: function () {
+        this.createShirt()
+        this.createPants()
+        this.createShoes()
     },
-    createGreetingTone: function () {
-        return new GreetingTone('.')
+    createShirt: function () {
+        return new RedShirt()
+    },
+    createPants: function () {
+        return new RedPants()
+    },
+    createShoes: function () {
+        return new RedShoes()
     },
 }
 
-function NeutralGreeter() {}
-NeutralGreeter.prototype = new GreeterFactory()
-
-function HappyGreeter() {}
-HappyGreeter.prototype = new GreeterFactory()
-HappyGreeter.prototype.createGreetingTone = function () {
-    return new GreetingTone('!')
+// Blue clothing factory
+const blueClothingFactory = {
+    createClothingSet: function () {
+        this.createShirt()
+        this.createPants()
+        this.createShoes()
+    },
+    createShirt: function () {
+        return new BlueShirt()
+    },
+    createPants: function () {
+        return new BluePants()
+    },
+    createShoes: function () {
+        return new BlueShoes()
+    },
 }
 
-function Greeting(text) {
-    this.text = text
+// Red clothing products
+function RedShirt() {
+    console.log('Red shirt created')
 }
 
-function GreetingTone(tone) {
-    if (tone !== '.' && tone !== '!') {
-        console.log('Invalid tone. Tone must be either "." or "!"')
-        this.tone = '.'
-    } else this.tone = tone
+function RedPants() {
+    console.log('Red pants created')
 }
 
-const happyGreeter = new HappyGreeter()
-const greetingMessage = happyGreeter.createGreeting()
-const greetingTone = happyGreeter.createGreetingTone()
-console.log(greetingMessage.text + greetingTone.tone)
+function RedShoes() {
+    console.log('Red shoes created')
+}
+
+// Blue clothing products
+function BlueShirt() {
+    console.log('Blue shirt created')
+}
+
+function BluePants() {
+    console.log('Blue pants created')
+}
+
+function BlueShoes() {
+    console.log('Blue shoes created')
+}
+
+// Usage (client)
+let clothingFactory = redClothingFactory
+clothingFactory.createClothingSet()
+
+clothingFactory = blueClothingFactory
+clothingFactory.createClothingSet()
