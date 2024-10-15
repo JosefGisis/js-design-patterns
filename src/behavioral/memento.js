@@ -69,12 +69,18 @@ function UserMemento(originator) {
 }
 
 // Usage
+
+// Create two originators
 const johnUser = new UserOriginator('John Doe', 'male', 25)
 const janeUser = new UserOriginator('Jane Doe', 'female', 23)
 console.log(johnUser.getUser())
+
+// Create a memento for John
 const johnMemento = johnUser.createMemento()
 johnUser.setUser('Jon Doe', 'female', 30)
 console.log(johnUser.getUser())
+
+// trying to set jane's state using john's memento will not work
 janeUser.restoreState(johnMemento)
 johnUser.restoreState(johnMemento)
 console.log(johnUser.getUser())
