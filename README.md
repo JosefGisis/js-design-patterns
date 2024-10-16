@@ -2,7 +2,21 @@
 
 This repository contains practice examples for all 23 design patterns from "Design Patterns: Elements of Reusable Object-Oriented Software" by Gamma, Helm, Johnson, and Vlissides in JavaScript.
 
-In order to demonstrate JavaScript's native functionality, none of the examples utilize ES6 classes. Because of the incompatibility between class based design patters, many of the examples will focus on the "intent" of the design pattern (if a design patterns "intent" is based on class-based inheritance, the example will focus on the "motivation" for the design pattern.)
+### Design Pattern in JavaScript.
+
+In order to demonstrate JavaScript's native functionality, none of the examples in this repository utilize ES6 classes. JavaScript objects work through prototypical inheritance: all objects are created by cloning existing objects. These cloned objects "inherit" their prototype's methods (really they use their prototypes methods). Functions and arrays are first-class objects that inherit from the root prototype which is the Object.prototype.
+
+This is all to say that JavaScript is quite different than a typical class-based object-oriented language. The design patterns by the "Gang of Four" are class/interface based, so we cannot copy their implementations; instead, we want to mimic the functionality of the design patterns by using JavaScript's prototypical and dynamic nature. We also want to balance conforming to the design patterns without over-complicating the code by trying to force JavaScript to work like a class based language.
+
+Prototypes can mimic class inheritance and interface by having constructors (constructor functions responsible for instantiating objects) inheriting prototypes instead of objects inheriting their prototypes directly. We do this by adding the prototype of a pseudo-abstract constructor to another "inheriting" constructor. The pseudo-abstract constructor is not really an abstract because it can be instantiated, but it is similar to an abstract class in that it provides a default implementation and can even prevent usage by throwing an error if the methods are called without being overridden. The inheriting constructors can then either use its prototypes methods or override them. We can also borrow the super-constructors functionality (such as its constructor functionality) by directly referencing its prototype, such as sub-constructor.constructor = super-constructor.prototype.constructor. This is the equivalent of super() in ECMAScript classes.
+
+But! Prototypical inheritance only makes sense if some of the implementation can be shared amongst inheriting objects. Oftentimes, inheriting constructors have no implementations in common; that is, sub-constructors always need to override their inherited methods. When this is the case, prototypical inheritance, only adds complexity and boilerplate. Use duck typing instead.
+
+Duck typing does not use interface or inheritance to compose behavior. The idea behind duck typing is "if it walks like a duck and quacks like a duck, it is a duck!" Meaning we use object as if they share an interface, because we compose them with the same signatures. This allows us to use polymorphism without class inheritance. If we forgot to add a method or property to one the objects, we catch the error at run-time.
+
+Another feature of objects in JavaScript is the object literal notation. We can create objects without defining a class. This simplifies design patterns because in many situations we only need a single instance of an object for the design. We can also leverage object composition by using object literal notation instead of composing classes. 
+
+We can also use 
 
 ### What are design patterns?
 
