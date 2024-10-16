@@ -6,9 +6,9 @@
  * This pattern is useful when you have an algorithm that has a fixed set of steps but the implementation of those steps can vary.
  *
  * The template method is related the builder patterns in that the builder pattern often uses a template method to define the building process.
- * 
+ *
  * With prototypes, all prototype methods are essentially hooks; that is, they have a default implementation that can be overridden
- * by the "subclass if needed". We could leave some prototype methods empty and throw an error if they are called, but what is the
+ * by the "subclass" if needed. We could leave some prototype methods empty and throw an error if they are called, but what is the
  * point of prototyping if we don't use its features?
  */
 
@@ -40,9 +40,11 @@ BakeBread.prototype = {
 
 // Set sourdough as the prototype inheritor of bake bread
 function BakeSourdough() {
+    // override the prepareIngredients and letDoughRise methods
     this.prepareIngredients = function () {
         console.log('Getting flour, water, and sourdough starter')
     }
+    // override the letDoughRise method
     this.letDoughRise = function () {
         console.log('Letting dough rise for 24 hours')
     }
@@ -50,6 +52,7 @@ function BakeSourdough() {
 BakeSourdough.prototype = new BakeBread()
 BakeSourdough.prototype.constructor = BakeSourdough
 
+// Set whole wheat as the prototype inheritor of bake bread
 function BakeWholeWheat() {
     this.prepareIngredients = function () {
         console.log('Getting whole wheat flour, water, and yeast')
