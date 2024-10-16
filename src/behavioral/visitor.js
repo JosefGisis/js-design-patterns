@@ -15,6 +15,7 @@
  * We just need to bind the object to the method.
  */
 
+// Visitor methods for logging for all the data type
 const loggerMethods = {
     logNumber: function () {
         console.log(this.number)
@@ -27,6 +28,7 @@ const loggerMethods = {
     },
 }
 
+// Visitor methods for incrementing for all the data type
 const incrementerMethods = {
     incrementNumber: function () {
         this.number++
