@@ -44,8 +44,8 @@ const movieReviewData = (function () {
     }
 })()
 
-// You would really create multiple observers and add them to the movieReviewData object
-// We will just create one for demonstration purposes
+// You create multiple observers and add them to the movieReviewData object
+// This observer displays all the movie reviews
 function MovieReviewObserver(id, dependency) {
     this.id = id
     this.dependency = dependency
@@ -54,12 +54,48 @@ function MovieReviewObserver(id, dependency) {
     this.update = function () {
         this.movieReviews = this.dependency?.getMovies() || []
         console.log(' ')
-        console.log('Movie Names:')
-        this.movieReviews.map((review) => console.log(review.name))
+        console.log('Movie Reviews:')
+        this.movieReviews.map((review) =>
+            console.log(`${review.name}: ${review.rating}`)
+        )
+    }
+}
+
+// This observer displays only the top movies
+function TopMoviesObserver(id, dependency) {
+    this.id = id
+    this.dependency = dependency
+    this.movieReviews = []
+
+    this.update = function () {
+        this.movieReviews = this.dependency?.getMovies() || []
+        console.log(' ')
+        console.log('Top Movies:')
+        this.movieReviews
+            .filter((review) => review.rating > 8)
+            .map((review) => console.log(`${review.name}: ${review.rating}`))
+    }
+}
+
+// This observer displays only the worst movies
+function WorstMoviesObserver(id, dependency) {
+    this.id = id
+    this.dependency = dependency
+    this.movieReviews = []
+
+    this.update = function () {
+        this.movieReviews = this.dependency?.getMovies() || []
+        console.log(' ')
+        console.log('Worst Movies:')
+        this.movieReviews
+            .filter((review) => review.rating < 5)
+            .map((review) => console.log(`${review.name}: ${review.rating}`))
     }
 }
 
 // Usage
+
+// Movie review data.
 const movieReviews = [
     { id: 1, name: 'Django Unchained', rating: 9 },
     { id: 2, name: 'Pulp Fiction', rating: 9 },
@@ -73,10 +109,18 @@ const movieReviews = [
     { id: 11, name: 'Death Proof', rating: 4 },
 ]
 
+// Create the observers
 const movieReviewNameObserver = new MovieReviewObserver(1, movieReviewData)
+const topMoviesObserver = new TopMoviesObserver(2, movieReviewData)
+const worstMoviesObserver = new WorstMoviesObserver(3, movieReviewData)
+
+// Add the observers to the movieReviewData object
 movieReviewData.addObserver(movieReviewNameObserver)
+movieReviewData.addObserver(topMoviesObserver)
+movieReviewData.addObserver(worstMoviesObserver)
 
 movieReviewData.setMovieReviews(movieReviews)
+// You can add more movie reviews and the observers will update accordingly
 movieReviewData.setMovieReviews([
     ...movieReviews,
     { id: 10, name: 'From Dusk Till Dawn', rating: 3 },
