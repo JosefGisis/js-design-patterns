@@ -5,41 +5,111 @@
  * to an external object.
  */
 
-// These are state singletons. Because they are object literals, we do not have to instantiate out states
-const guestState = {
-    showBanner: function (name) {
-        console.log('welcome to out website, create an account to get started')
-    },
+// These states manage the state of the context (Order). That is
+// they move state when an action is performed such as checkout or pay.
+function CartState(order) {
+    this.order = order
+    this.addItems = function () {
+        console.log('item added to cart')
+    }
+    this.removeItems = function () {
+        console.log('item removed from cart')
+    }
+    this.checkout = function () {
+        console.log('proceeding to checkout')
+        this.order.setState(this.order.checkoutState)
+    }
+    this.pay = function () {
+        console.log('please checkout first')
+    }
 }
 
-const memberState = {
-    showBanner: function (name) {
-        console.log('welcome back to our website ' + name)
-    },
+function CheckoutState(order) {
+    this.order = order
+    this.addItems = function () {
+        console.log('cannot add items after checkout')
+    }
+    this.removeItems = function () {
+        console.log('cannot remove items after checkout')
+    }
+    this.checkout = function () {
+        console.log('already checked out')
+    }
+    this.pay = function () {
+        console.log('payment successful')
+        this.order.setState(this.order.paidState)
+    }
 }
 
-// The website object is the context. It has a state property that is initially set to null
-// The state property is then set to either the guestState or memberState object.
-const website = {
-    state: null,
-    userName: '',
-
-    showBanner: function () {
-        this.state.showBanner(this.userName)
-    },
-
-    openWebsite: function () {
-        this.state = guestState
-    },
-
-    login: function (userName) {
-        this.userName = userName
-        this.state = memberState
-    },
+function PaidState(order) {
+    this.order = order
+    this.addItems = function () {
+        console.log('start a new order to add items')
+    }
+    this.removeItems = function () {
+        console.log('start a new order to remove items')
+    }
+    this.checkout = function () {
+        console.log('order complete')
+    }
+    this.pay = function () {
+        console.log('order complete')
+    }
 }
 
-// Usage
-website.openWebsite()
-website.showBanner()
-website.login('John Doe')
-website.showBanner()
+// context. Contains the state and seems to change behavior
+// based on the state
+function Order() {
+    this.cartState = new CartState(this)
+    this.checkoutState = new CheckoutState(this)
+    this.paidState = new PaidState(this)
+
+    this.state = this.cartState
+
+    this.setState = function (state) {
+        this.state = state
+    }
+
+    this.addItems = function () {
+        this.state.addItems()
+    }
+
+    this.removeItems = function () {
+        this.state.removeItems()
+    }
+
+    this.checkout = function () {
+        this.state.checkout()
+    }
+
+    this.pay = function () {
+        this.state.pay()
+    }
+}
+
+// Usage (client code)
+const order = new Order()
+
+// in card
+order.addItems()
+order.removeItems()
+order.pay()
+
+// move to checkout
+order.checkout()
+
+// in checkout
+console.log('\n', '---')
+order.addItems()
+order.removeItems()
+order.checkout()
+
+// pay
+order.pay()
+
+// in paid
+console.log('\n', '---')
+order.addItems()
+order.removeItems()
+order.checkout()
+order.pay()
